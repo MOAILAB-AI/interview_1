@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOAI LAB — F&B 운영자 인터뷰</title>
+<style>
+  :root {
+    --bg: #0e0e10;
+    --bg2: #16161a;
+    --bg3: #1e1e24;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #f0f0f0;
+    --text2: #9a9aaa;
+    --text3: #5a5a6a;
+    --accent: #6c63ff;
+    --accent2: #8b84ff;
+    --accent-bg: rgba(108,99,255,0.12);
+    --accent-border: rgba(108,99,255,0.4);
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Pretendard', 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(14,14,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--accent2);
+    text-transform: uppercase;
+  }
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .progress-bar {
+    width: 120px;
+    height: 3px;
+    background: var(--bg3);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 100px 24px 80px;
+  }
+  .hero {
+    text-align: center;
+    padding: 48px 0 56px;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 99px;
+    padding: 5px 14px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+  .hero p {
+    color: var(--text2);
+    font-size: 15px;
+    max-width: 440px;
+    margin: 0 auto 8px;
+    line-height: 1.7;
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  .hero-meta span {
+    font-size: 12px;
+    color: var(--text3);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text3); }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-block {
+    margin-bottom: 48px;
+  }
+
+  .q-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .q-block.active {
+    border-color: var(--accent-border);
+  }
+  .q-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .q-hint {
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 14px;
+  }
+
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    background: var(--bg3);
+  }
+  .option:hover {
+    border-color: var(--border-hover);
+    background: rgba(255,255,255,0.04);
+  }
+  .option.selected {
+    border-color: var(--accent-border);
+    background: var(--accent-bg);
+  }
+  .option-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border-hover);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: all 0.15s;
+    color: transparent;
+  }
+  .option.selected .option-check {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .option-radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-hover);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .option-radio::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .option.selected .option-radio {
+    border-color: var(--accent);
+  }
+  .option.selected .option-radio::after {
+    background: var(--accent);
+  }
+  .option-text {
+    font-size: 14px;
+    color: var(--text);
+    flex: 1;
+  }
+  .option.selected .option-text {
+    color: var(--accent2);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .info-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .info-card-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+
+  .text-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 14px;
+    padding: 12px 14px;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    line-height: 1.6;
+  }
+  .text-input:focus {
+    border-color: var(--accent-border);
+  }
+  .text-input::placeholder { color: var(--text3); }
+
+  .conditional {
+    background: rgba(108,99,255,0.06);
+    border: 1px dashed var(--accent-border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-top: 10px;
+    display: none;
+  }
+  .conditional.show { display: block; }
+  .conditional .q-label { color: var(--accent2); opacity: 0.7; }
+
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg3);
+    margin-bottom: 8px;
+  }
+  .rank-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .rank-num.r1 { background: var(--accent); border-color: var(--accent); color: white; }
+  .rank-num.r2 { background: rgba(108,99,255,0.5); border-color: var(--accent); color: white; }
+  .rank-num.r3 { background: rgba(108,99,255,0.25); border-color: var(--accent-border); color: var(--accent2); }
+
+  .submit-section {
+    text-align: center;
+    padding: 40px 0 60px;
+  }
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px 36px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .submit-btn:hover { background: var(--accent2); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-note {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 14px;
+  }
+
+  .thank-you {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .thank-you.show { display: block; }
+  .ty-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--green-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 28px;
+  }
+  .ty-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .ty-desc {
+    color: var(--text2);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .form-content { transition: opacity 0.3s; }
+  .form-content.hidden { display: none; }
+
+  @media (max-width: 480px) {
+    .info-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+    .topbar { padding: 12px 16px; }
+    .container { padding: 90px 16px 80px; }
+    .progress-bar { width: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">MOAI LAB</div>
+  <div class="progress-wrap">
+    <span class="progress-label" id="prog-label">0 / 11</span>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="form-content" id="form-content">
+    <div class="hero">
+      <div class="hero-badge">시장 조사 인터뷰</div>
+      <h1>F&B 매장 운영자<br>로봇 도입 의향 조사</h1>
+      <p>매장 운영의 어려움과 자동화에 대한 솔직한 의견을 들려주세요. 응답은 익명으로 처리되며 연구 목적으로만 사용됩니다.</p>
+      <div class="hero-meta">
+        <span>⏱ 약 5분 소요</span>
+        <div class="dot"></div>
+        <span>🔒 익명 처리</span>
+        <div class="dot"></div>
+        <span>11개 문항</span>
+      </div>
+    </div>
+
+    <!-- 기본 정보 -->
+    <div class="section-block">
+      <div class="section-label">기본 정보</div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-label">매장 유형</div>
+          <div class="options-grid" id="q-type">
+            <div class="option" onclick="selectRadio(this,'type')"><div class="option-radio"></div><div class="option-text">한식</div></div>
+            <div class="option" onclick="selectRadio(this,'type')"><div class="option-radio"></div><div class="option-text">중식</div></div>
+            <div class="option" onclick="selectRadio(this,'type')"><div class="option-radio"></div><div class="option-text">일식</div></div>
+            <div class="option" onclick="selectRadio(this,'type')"><div class="option-radio"></div><div class="option-text">양식</div></div>
+            <div class="option" onclick="selectRadio(this,'type')"><div class="option-radio"></div><div class="option-text">카페·디저트</div></div>
+            <div class="option" onclick="selectRadio(this,'type')"><div class="option-radio"></div><div class="option-text">패스트푸드·분식</div></div>
+            <div class="option" onclick="selectRadio(this,'type')"><div class="option-radio"></div><div class="option-text">기타</div></div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">매장 규모 (좌석 수)</div>
+          <div class="options-grid" id="q-size">
+            <div class="option" onclick="selectRadio(this,'size')"><div class="option-radio"></div><div class="option-text">5석 이하</div></div>
+            <div class="option" onclick="selectRadio(this,'size')"><div class="option-radio"></div><div class="option-text">6~20석</div></div>
+            <div class="option" onclick="selectRadio(this,'size')"><div class="option-radio"></div><div class="option-text">21~50석</div></div>
+            <div class="option" onclick="selectRadio(this,'size')"><div class="option-radio"></div><div class="option-text">51석 이상</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb-staff">
+        <div class="q-label">기본 정보</div>
+        <div class="q-text">현재 직원은 몇 명인가요?</div>
+        <div class="options-grid" id="q-staff">
+          <div class="option" onclick="selectRadio(this,'staff')"><div class="option-radio"></div><div class="option-text">사장 혼자</div></div>
+          <div class="option" onclick="selectRadio(this,'staff')"><div class="option-radio"></div><div class="option-text">1~2명</div></div>
+          <div class="option" onclick="selectRadio(this,'staff')"><div class="option-radio"></div><div class="option-text">3~5명</div></div>
+          <div class="option" onclick="selectRadio(this,'staff')"><div class="option-radio"></div><div class="option-text">6명 이상</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 1 -->
+    <div class="section-block">
+      <div class="section-label">섹션 1 — 운영 현황</div>
+
+      <div class="q-block" id="qb1">
+        <div class="q-label">Q1</div>
+        <div class="q-text">현재 매장 운영에서 가장 힘든 점은 무엇인가요?</div>
+        <div class="q-hint">복수 선택 가능</div>
+        <div class="options-grid" id="q1">
+          <div class="option" onclick="toggleCheck(this,'q1')"><div class="option-check">✓</div><div class="option-text">직원 채용이 어렵다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q1')"><div class="option-check">✓</div><div class="option-text">직원이 자주 그만둔다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q1')"><div class="option-check">✓</div><div class="option-text">인건비 부담이 크다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q1')"><div class="option-check">✓</div><div class="option-text">피크타임 인력이 부족하다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q1')"><div class="option-check">✓</div><div class="option-text">일정한 음식 품질 유지가 어렵다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q1')"><div class="option-check">✓</div><div class="option-text">기타</div></div>
+        </div>
+
+        <!-- 조건부: 채용 어려움 선택 시 -->
+        <div class="conditional" id="cond-q2">
+          <div class="q-label">Q2 — 추가 질문</div>
+          <div class="q-text" style="font-size:14px; margin-bottom:12px;">구인 어려움이 얼마나 자주 발생하나요?</div>
+          <div class="options-grid" id="q2">
+            <div class="option" onclick="selectRadio(this,'q2')"><div class="option-radio"></div><div class="option-text">항상 힘들다 (구할 때마다)</div></div>
+            <div class="option" onclick="selectRadio(this,'q2')"><div class="option-radio"></div><div class="option-text">가끔 힘들다 (명절·시즌 등 특정 시기)</div></div>
+            <div class="option" onclick="selectRadio(this,'q2')"><div class="option-radio"></div><div class="option-text">한두 번 있었지만 지금은 괜찮다</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb3">
+        <div class="q-label">Q3</div>
+        <div class="q-text">가장 시간이 많이 걸리거나 반복적인 작업은 무엇인가요?</div>
+        <div class="q-hint">최대 3개 선택</div>
+        <div class="options-grid" id="q3">
+          <div class="option" onclick="toggleCheck(this,'q3',3)"><div class="option-check">✓</div><div class="option-text">조리 (볶기·튀기기 등 화구 작업)</div></div>
+          <div class="option" onclick="toggleCheck(this,'q3',3)"><div class="option-check">✓</div><div class="option-text">재료 손질·전처리</div></div>
+          <div class="option" onclick="toggleCheck(this,'q3',3)"><div class="option-check">✓</div><div class="option-text">서빙·홀 서비스</div></div>
+          <div class="option" onclick="toggleCheck(this,'q3',3)"><div class="option-check">✓</div><div class="option-text">설거지·청소</div></div>
+          <div class="option" onclick="toggleCheck(this,'q3',3)"><div class="option-check">✓</div><div class="option-text">주문 접수·결제</div></div>
+          <div class="option" onclick="toggleCheck(this,'q3',3)"><div class="option-check">✓</div><div class="option-text">재고 관리·발주</div></div>
+          <div class="option" onclick="toggleCheck(this,'q3',3)"><div class="option-check">✓</div><div class="option-text">기타</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 2 -->
+    <div class="section-block">
+      <div class="section-label">섹션 2 — 자동화 인식</div>
+
+      <div class="q-block" id="qb4">
+        <div class="q-label">Q4</div>
+        <div class="q-text">로봇 또는 자동화 장비 도입을 고려해본 적 있나요?</div>
+        <div class="options-grid" id="q4">
+          <div class="option" onclick="selectRadio(this,'q4'); showCond('cond-q4',false)"><div class="option-radio"></div><div class="option-text">진지하게 알아본 적 있다</div></div>
+          <div class="option" onclick="selectRadio(this,'q4'); showCond('cond-q4',false)"><div class="option-radio"></div><div class="option-text">생각해본 적은 있지만 알아보지는 않았다</div></div>
+          <div class="option" onclick="selectRadio(this,'q4'); showCond('cond-q4',true)"><div class="option-radio"></div><div class="option-text">생각해본 적 없다</div></div>
+        </div>
+        <div class="conditional" id="cond-q4">
+          <div class="q-label">Q4-1 — 추가 질문</div>
+          <div class="q-text" style="font-size:14px; margin-bottom:12px;">고려하지 않은 이유가 있다면?</div>
+          <div class="options-grid" id="q4-1">
+            <div class="option" onclick="toggleCheck(this,'q4-1')"><div class="option-check">✓</div><div class="option-text">로봇이 필요하다고 생각하지 않는다</div></div>
+            <div class="option" onclick="toggleCheck(this,'q4-1')"><div class="option-check">✓</div><div class="option-text">어떤 로봇이 있는지 잘 모른다</div></div>
+            <div class="option" onclick="toggleCheck(this,'q4-1')"><div class="option-check">✓</div><div class="option-text">비용이 부담될 것 같다</div></div>
+            <div class="option" onclick="toggleCheck(this,'q4-1')"><div class="option-check">✓</div><div class="option-text">기타</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb4b">
+        <div class="q-label">Q4-2</div>
+        <div class="q-text">도입을 고려했거나 망설였다면, 가장 큰 이유는 무엇인가요?</div>
+        <div class="q-hint">복수 선택 가능</div>
+        <div class="options-grid" id="q4b">
+          <div class="option" onclick="toggleCheck(this,'q4b')"><div class="option-check">✓</div><div class="option-text">비용이 너무 비쌌다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q4b')"><div class="option-check">✓</div><div class="option-text">우리 매장에 맞는 제품이 없었다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q4b')"><div class="option-check">✓</div><div class="option-text">믿을 수 있을지 확신이 없었다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q4b')"><div class="option-check">✓</div><div class="option-text">고장 났을 때 대응이 걱정됐다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q4b')"><div class="option-check">✓</div><div class="option-text">주방·홀 공간이 부족하다</div></div>
+          <div class="option" onclick="toggleCheck(this,'q4b')"><div class="option-check">✓</div><div class="option-text">해당 없음</div></div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb5">
+        <div class="q-label">Q5</div>
+        <div class="q-text">로봇이 대신해줬으면 하는 작업 1순위는?</div>
+        <div class="options-grid" id="q5">
+          <div class="option" onclick="selectRadio(this,'q5')"><div class="option-radio"></div><div class="option-text">조리 (볶기·튀기기 등)</div></div>
+          <div class="option" onclick="selectRadio(this,'q5')"><div class="option-radio"></div><div class="option-text">재료 손질</div></div>
+          <div class="option" onclick="selectRadio(this,'q5')"><div class="option-radio"></div><div class="option-text">서빙</div></div>
+          <div class="option" onclick="selectRadio(this,'q5')"><div class="option-radio"></div><div class="option-text">설거지·청소</div></div>
+          <div class="option" onclick="selectRadio(this,'q5')"><div class="option-radio"></div><div class="option-text">없다 / 모르겠다</div></div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb6">
+        <div class="q-label">Q6</div>
+        <div class="q-text">반대로, 절대 로봇에게 맡기고 싶지 않은 작업과 이유가 있다면?</div>
+        <textarea class="text-input" placeholder="자유롭게 작성해주세요..." id="q6" oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+
+    <!-- 섹션 2-1 -->
+    <div class="section-block">
+      <div class="section-label">섹션 2-1 — 로봇에 대한 인식</div>
+
+      <div class="q-block" id="qbA">
+        <div class="q-label">Q-A</div>
+        <div class="q-text">주방에서 쓰는 로봇의 가격이 얼마 정도일 것 같으세요?</div>
+        <div class="options-grid" id="qA">
+          <div class="option" onclick="selectRadio(this,'qA')"><div class="option-radio"></div><div class="option-text">100만원 이하</div></div>
+          <div class="option" onclick="selectRadio(this,'qA')"><div class="option-radio"></div><div class="option-text">100만원 ~ 500만원</div></div>
+          <div class="option" onclick="selectRadio(this,'qA')"><div class="option-radio"></div><div class="option-text">500만원 ~ 1,000만원</div></div>
+          <div class="option" onclick="selectRadio(this,'qA')"><div class="option-radio"></div><div class="option-text">1,000만원 ~ 3,000만원</div></div>
+          <div class="option" onclick="selectRadio(this,'qA')"><div class="option-radio"></div><div class="option-text">3,000만원 이상</div></div>
+          <div class="option" onclick="selectRadio(this,'qA')"><div class="option-radio"></div><div class="option-text">전혀 모르겠다</div></div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qbB">
+        <div class="q-label">Q-B</div>
+        <div class="q-text">주방에 놓을 수 있는 로봇 크기, 어느 정도까지 허용 가능하신가요?</div>
+        <div class="options-grid" id="qB">
+          <div class="option" onclick="selectRadio(this,'qB')"><div class="option-radio"></div><div class="option-text">믹서기·밥솥 정도 (테이블 위에 올라오는 크기)</div></div>
+          <div class="option" onclick="selectRadio(this,'qB')"><div class="option-radio"></div><div class="option-text">전자레인지~냉장고 정도 (주방 한 켠 차지)</div></div>
+          <div class="option" onclick="selectRadio(this,'qB')"><div class="option-radio"></div><div class="option-text">사람 한 명 크기 정도</div></div>
+          <div class="option" onclick="selectRadio(this,'qB')"><div class="option-radio"></div><div class="option-text">크기보다 성능이 중요하다, 크기는 상관없다</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 3 -->
+    <div class="section-block">
+      <div class="section-label">섹션 3 — 도입 조건</div>
+
+      <div class="q-block" id="qb7">
+        <div class="q-label">Q7</div>
+        <div class="q-text">로봇 도입 시 가장 중요하게 보는 기준은?</div>
+        <div class="q-hint">1~3순위로 클릭해서 선택해주세요</div>
+        <div id="q7">
+          <div class="rank-item" onclick="toggleRank(this,'q7')"><div class="rank-num">-</div><div class="option-text" style="font-size:14px">가격</div></div>
+          <div class="rank-item" onclick="toggleRank(this,'q7')"><div class="rank-num">-</div><div class="option-text" style="font-size:14px">작업 정확도·신뢰성</div></div>
+          <div class="rank-item" onclick="toggleRank(this,'q7')"><div class="rank-num">-</div><div class="option-text" style="font-size:14px">고장 시 AS 속도</div></div>
+          <div class="rank-item" onclick="toggleRank(this,'q7')"><div class="rank-num">-</div><div class="option-text" style="font-size:14px">설치·운영 편의성</div></div>
+          <div class="rank-item" onclick="toggleRank(this,'q7')"><div class="rank-num">-</div><div class="option-text" style="font-size:14px">위생·안전 기준 충족</div></div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb8">
+        <div class="q-label">Q8</div>
+        <div class="q-text">어떤 도입 방식이 더 편하신가요?</div>
+        <div class="options-grid" id="q8">
+          <div class="option" onclick="selectRadio(this,'q8')"><div class="option-radio"></div><div class="option-text">월 구독 (초기 비용 없이 월정액, 고장 시 교체 포함)</div></div>
+          <div class="option" onclick="selectRadio(this,'q8')"><div class="option-radio"></div><div class="option-text">일시 구매 (초기 비용 높지만 이후 유지비 낮음)</div></div>
+          <div class="option" onclick="selectRadio(this,'q8')"><div class="option-radio"></div><div class="option-text">리스 (중간 형태)</div></div>
+          <div class="option" onclick="selectRadio(this,'q8')"><div class="option-radio"></div><div class="option-text">잘 모르겠다</div></div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb9">
+        <div class="q-label">Q9</div>
+        <div class="q-text">직원 1명 월 인건비와 비교했을 때, 어느 수준이면 도입을 검토하시겠어요?</div>
+        <div class="options-grid" id="q9">
+          <div class="option" onclick="selectRadio(this,'q9')"><div class="option-radio"></div><div class="option-text">인건비의 25% 이하 (약 50~60만원)</div></div>
+          <div class="option" onclick="selectRadio(this,'q9')"><div class="option-radio"></div><div class="option-text">인건비의 50% 수준 (약 100~120만원)</div></div>
+          <div class="option" onclick="selectRadio(this,'q9')"><div class="option-radio"></div><div class="option-text">인건비와 비슷한 수준 (약 200~250만원)</div></div>
+          <div class="option" onclick="selectRadio(this,'q9')"><div class="option-radio"></div><div class="option-text">인건비보다 높아도 품질·안정성이 보장되면 괜찮다</div></div>
+          <div class="option" onclick="selectRadio(this,'q9')"><div class="option-radio"></div><div class="option-text">어떤 가격이어도 도입할 생각이 없다</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 4 -->
+    <div class="section-block">
+      <div class="section-label">섹션 4 — 마무리</div>
+
+      <div class="q-block" id="qb10">
+        <div class="q-label">Q10</div>
+        <div class="q-text">로봇 관련 정보를 주로 어디서 얻으시나요?</div>
+        <div class="q-hint">복수 선택 가능</div>
+        <div class="options-grid" id="q10">
+          <div class="option" onclick="toggleCheck(this,'q10')"><div class="option-check">✓</div><div class="option-text">유튜브·SNS</div></div>
+          <div class="option" onclick="toggleCheck(this,'q10')"><div class="option-check">✓</div><div class="option-text">지인·업계 소문</div></div>
+          <div class="option" onclick="toggleCheck(this,'q10')"><div class="option-check">✓</div><div class="option-text">전시회·박람회</div></div>
+          <div class="option" onclick="toggleCheck(this,'q10')"><div class="option-check">✓</div><div class="option-text">뉴스·기사</div></div>
+          <div class="option" onclick="toggleCheck(this,'q10')"><div class="option-check">✓</div><div class="option-text">관심 없어서 찾아본 적 없다</div></div>
+        </div>
+      </div>
+
+      <div class="q-block" id="qb11">
+        <div class="q-label">Q11</div>
+        <div class="q-text">로봇 도입과 관련해 가장 걱정되는 점을 자유롭게 적어주세요.</div>
+        <textarea class="text-input" placeholder="자유롭게 작성해주세요..." id="q11" oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <button class="submit-btn" onclick="submitForm()">응답 제출하기 →</button>
+      <div class="submit-note">응답은 암호화되어 안전하게 전송됩니다</div>
+    </div>
+  </div>
+
+  <!-- 감사 화면 -->
+  <div class="thank-you" id="thank-you">
+    <div class="ty-icon">✓</div>
+    <div class="ty-title">소중한 응답 감사합니다</div>
+    <div class="ty-desc">응답 내용은 F&B 로봇 솔루션 개발에 소중하게 활용하겠습니다.<br><br>MOAI LAB은 더 나은 현장을 만들기 위해 노력합니다.</div>
+  </div>
+</div>
+
+<script>
+const radioState = {};
+const checkState = {};
+const rankState = {};
+
+function selectRadio(el, group) {
+  const container = el.closest('.options-grid, .info-card');
+  if (!container) return;
+  container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  radioState[group] = el.querySelector('.option-text').textContent;
+  updateProgress();
+  if (group === 'q1') checkQ1Conditional();
+}
+
+function toggleCheck(el, group, max) {
+  const container = el.closest('.options-grid');
+  const selected = container.querySelectorAll('.option.selected');
+  if (!el.classList.contains('selected') && max && selected.length >= max) return;
+  el.classList.toggle('selected');
+  if (!checkState[group]) checkState[group] = [];
+  const text = el.querySelector('.option-text').textContent;
+  const idx = checkState[group].indexOf(text);
+  if (idx > -1) checkState[group].splice(idx, 1);
+  else checkState[group].push(text);
+  updateProgress();
+  if (group === 'q1') checkQ1Conditional();
+}
+
+function checkQ1Conditional() {
+  const selected = document.querySelectorAll('#q1 .option.selected');
+  const texts = Array.from(selected).map(o => o.querySelector('.option-text').textContent);
+  const hasHiring = texts.some(t => t.includes('채용') || t.includes('그만'));
+  const cond = document.getElementById('cond-q2');
+  if (hasHiring) cond.classList.add('show');
+  else cond.classList.remove('show');
+}
+
+function showCond(id, show) {
+  const el = document.getElementById(id);
+  if (show) el.classList.add('show');
+  else el.classList.remove('show');
+}
+
+const rankCounts = {};
+function toggleRank(el, group) {
+  if (!rankCounts[group]) rankCounts[group] = 0;
+  if (el.classList.contains('selected')) {
+    const num = el.querySelector('.rank-num');
+    const myRank = parseInt(num.textContent);
+    el.classList.remove('selected');
+    num.textContent = '-';
+    num.className = 'rank-num';
+    const container = document.getElementById(group);
+    container.querySelectorAll('.rank-item.selected').forEach(item => {
+      const n = item.querySelector('.rank-num');
+      const r = parseInt(n.textContent);
+      if (r > myRank) {
+        const newR = r - 1;
+        n.textContent = newR;
+        n.className = 'rank-num r' + newR;
+      }
+    });
+    rankCounts[group] = Math.max(0, rankCounts[group] - 1);
+    updateProgress();
+    return;
+  }
+  if (rankCounts[group] >= 3) return;
+  rankCounts[group]++;
+  el.classList.add('selected');
+  const num = el.querySelector('.rank-num');
+  num.textContent = rankCounts[group];
+  num.className = 'rank-num r' + rankCounts[group];
+  updateProgress();
+}
+
+function countAnswered() {
+  let count = 0;
+  const groups = ['type','size','staff','q1','q3','q4','q5','qA','qB','q8','q9'];
+  groups.forEach(g => {
+    if (radioState[g] || (checkState[g] && checkState[g].length > 0)) count++;
+  });
+  if (rankCounts['q7'] > 0) count++;
+  if (document.getElementById('q6').value.trim()) count++;
+  return count;
+}
+
+function updateProgress() {
+  const total = 11;
+  const done = countAnswered();
+  document.getElementById('prog-label').textContent = done + ' / ' + total;
+  document.getElementById('prog-fill').style.width = Math.round(done / total * 100) + '%';
+  document.querySelectorAll('.q-block').forEach(b => {
+    const hasInput = b.querySelector('.option.selected, textarea');
+    if (hasInput) b.classList.add('active');
+  });
+}
+
+function getRankOrder(group) {
+  const items = document.querySelectorAll('#' + group + ' .rank-item.selected');
+  const sorted = Array.from(items).sort((a, b) => {
+    return parseInt(a.querySelector('.rank-num').textContent) - parseInt(b.querySelector('.rank-num').textContent);
+  });
+  return sorted.map(el => el.querySelector('.option-text').textContent);
+}
+
+async function submitForm() {
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw7BlIfH8I4wmM50OSq0a1TSPJA84CkhFge_kUh2uXXOAeJt-CK9kUQ4chDqu4XxmY5SQ/exec";
+
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = '제출 중...';
+  btn.disabled = true;
+
+  const payload = {
+    type:   radioState['type']  || "",
+    size:   radioState['size']  || "",
+    staff:  radioState['staff'] || "",
+    q1:     checkState['q1']    || [],
+    q2:     radioState['q2']    || "",
+    q3:     checkState['q3']    || [],
+    q4:     radioState['q4']    || "",
+    q4_1:   checkState['q4-1'] || [],
+    q4b:    checkState['q4b']  || [],
+    q5:     radioState['q5']    || "",
+    q6:     document.getElementById('q6').value,
+    qA:     radioState['qA']    || "",
+    qB:     radioState['qB']    || "",
+    q7:     getRankOrder('q7'),
+    q8:     radioState['q8']    || "",
+    q9:     radioState['q9']    || "",
+    q10:    checkState['q10']   || [],
+    q11:    document.getElementById('q11').value,
+  };
+
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "text/plain" }
+    });
+  } catch(e) {
+    console.error('전송 오류:', e);
+  }
+
+  document.getElementById('form-content').classList.add('hidden');
+  document.getElementById('thank-you').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+updateProgress();
+</script>
+</body>
+</html>
